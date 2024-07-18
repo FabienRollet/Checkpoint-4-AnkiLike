@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Form } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export default function Deck() {
+export default function Deck({ deckName, deckId }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -10,8 +11,10 @@ export default function Deck() {
 
   return (
     <section>
-      <h1 className="ml-12">Nom du paquet</h1>
-      <article className="collapse relavite top-[-45px]">
+      <Link to="/study" className="relative font-bold underline ml-12 z-10">
+        {deckName}
+      </Link>
+      <nav className="collapse relavite top-[-46px]">
         <input
           type="checkbox"
           className="hidden"
@@ -19,7 +22,7 @@ export default function Deck() {
           onChange={() => setIsOpen(!isOpen)}
         />
         <button
-          className="collapse-title text-xl font-medium flex items-center cursor-pointer"
+          className="collapse-title cursor-pointer"
           onClick={handleToggle}
           aria-expanded={isOpen}
           type="button"
@@ -36,7 +39,15 @@ export default function Deck() {
               <Link to="/cardsubmit">Ajouter une carte</Link>
             </li>
             <li>
-              <Link to="/">Parcourir les cartes</Link>
+              <button
+                type="button"
+                onClick={() => document.getElementById("update").showModal()}
+              >
+                Modifier le nom du paquet
+              </button>
+            </li>
+            <li>
+              <Link to="/browse">Parcourir les cartes</Link>
             </li>
             <li>
               <Link to="/">Partager</Link>
@@ -54,23 +65,55 @@ export default function Deck() {
         <dialog id="confirm" className="modal">
           <section className="modal-box">
             <h1 className="font-bold text-lg">
-              Supprimer le paquet [Nom du paquet]
+              Supprimer le paquet {deckName}
             </h1>
             <p className="py-4">
               Etes-vous sur de vouloir supprimer ce paquet ? Cette action est
-              irréversible{" "}
+              irréversible
             </p>
-            <form method="dialog" className="flex justify-center">
+            <Form
+              method="delete"
+              className="flex justify-center"
+            >
+              <input type="hidden" name="deckId" value={deckId} />
               <button
                 type="submit"
-                className="border-2 rounded-full px-5 w-56 m-auto my-6 "
+                className="border-2 rounded-full px-5 w-56 m-auto my-6"
               >
                 Supprimer
               </button>
-            </form>
+            </Form>
           </section>
         </dialog>
-      </article>
+        <dialog id="update" className="modal">
+          <section className="modal-box">
+            <h1 className="font-bold text-lg pb-5 text-center">
+              Modifier le nom du paquet : {deckName}
+            </h1>
+            <Form
+              method="edit"
+              className="flex flex-col items-center justify-center"
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder={deckName}
+                className="border-2 border rounded-[20px] px-4"
+              />
+              <button
+                type="submit"
+                className="border-2 rounded-full px-5 w-56 m-auto my-6"
+              >
+                Modifier
+              </button>
+            </Form>
+          </section>
+        </dialog>
+      </nav>
     </section>
   );
 }
+Deck.propTypes = {
+  deckName: PropTypes.string.isRequired,
+  deckId: PropTypes.string.isRequired,
+};
