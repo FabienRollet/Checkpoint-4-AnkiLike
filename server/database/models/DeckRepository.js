@@ -12,15 +12,24 @@ class DeckRepository extends AbstractRepository {
 
   async create(deck) {
     const [result] = await this.database.query(
-      `INSERT INTO ${this.table} (name, isShared, user_id) VALUES (?,?,?)`,
+      `INSERT INTO ${this.table} (name) VALUES (?)`,
       [
         deck.name,
-        deck.isShared,
-        deck.user_id
       ]
     );
 
     return result.insertId;
+  }
+
+  async update(deck) {
+    const [result] = await this.database.query(
+      `UPDATE ${this.table} SET name=? WHERE id=?`,
+      [
+        deck.name,
+        deck.id,
+      ]
+    );
+    return result.affectedRows;
   }
 
   async delete(id) {

@@ -1,8 +1,13 @@
-const ItemRepository = require("./models/ItemRepository");
+const DeckRepository = require("./models/DeckRepository")
+const CardRepository = require("./models/CardRepository")
+const UserRepository = require("./models/UserRepository")
 
 const tables = {};
 
-tables.item = new ItemRepository();
+tables.deck = new DeckRepository();
+tables.card = new CardRepository();
+tables.user = new UserRepository();
+
 
 module.exports = new Proxy(tables, {
   get(obj, prop) {
