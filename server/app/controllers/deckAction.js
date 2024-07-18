@@ -9,19 +9,6 @@ const browse = async (res, next) => {
   }
 };
 
-const read = async (req, res, next) => {
-  try {
-    const deck = await tables.deck.read(req.params.id);
-    if (deck == null) {
-      res.sendStatus(404);
-    } else {
-      res.json(deck);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
 const add = async (req, res, next) => {
   const deck = req.body;
   try {
@@ -33,9 +20,18 @@ const add = async (req, res, next) => {
   }
 };
 
+const destroy = async (req, res, next) => {
+  try {
+    await tables.deck.delete(req.params.id);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 module.exports = {
   browse,
-  read,
   add,
+  destroy,
 };

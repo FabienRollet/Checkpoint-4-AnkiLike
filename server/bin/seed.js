@@ -20,10 +20,12 @@ const seed = async () => {
         // eslint-disable-next-line import/no-dynamic-require, global-require
         const SeederClass = require(path.join(fixtures, filePath));
 
-        const seeder = new SeederClass();
-
-        dependencyMap[SeederClass] = seeder;
-      });
+        if (typeof SeederClass === 'function') {
+          const seeder = new SeederClass();
+          dependencyMap[SeederClass] = seeder;
+        } else {
+          console.error(`Module ${filePath} does not export a constructor.`);
+        }})
 
     // Sort seeders according to their dependencies
     const sortedSeeders = [];

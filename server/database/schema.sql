@@ -1,23 +1,32 @@
-create table user (
-    id int unsigned primary key auto_increment not null,
-    email varchar(255) not null unique,
-    password varchar(255) not null
+CREATE TABLE user (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL
 );
 
-create table card (
-    id int unsigned primary key auto_increment not null,
-    question text not null,
-    question_media varchar(500) null,
-    answer text not null,
-    answer_media varchar(500) null,
-    date int not null
+CREATE TABLE card (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    question TEXT NOT NULL,
+    question_media VARCHAR(500),
+    answer TEXT NOT NULL,
+    answer_media VARCHAR(500),
+    study_date DATE NOT NULL,
+    level INT NOT NULL
 );
 
-create table deck (
-    id int unsigned primary key auto_increment not null,
-    name varchar(255) not null,
-    user_id int unsigned not null,
-    card_id int unsigned not null,
-    foreign key (user_id) references user (id),
-    foreign key (card_id) references card (id)
+CREATE TABLE deck (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    isShared TINYINT(1) NOT NULL DEFAULT 0,
+    user_id INT UNSIGNED NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE deck_card (
+    deck_id INT UNSIGNED NOT NULL,
+    card_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (deck_id, card_id),
+    FOREIGN KEY (deck_id) REFERENCES deck (id),
+    FOREIGN KEY (card_id) REFERENCES card (id)
 );
